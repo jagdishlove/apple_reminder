@@ -68,7 +68,7 @@ const ReminderListItem = ({
         shadowRadius: 2,
       }}
     >
-      <TouchableOpacity onPress={() => completeTask(!isCompleted)}>
+      <TouchableOpacity onPress={() => completeTask(isCompleted)}>
         {isCompleted ? (
           <MaterialCommunityIcons
             name="check-circle"
