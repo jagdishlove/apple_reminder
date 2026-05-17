@@ -29,7 +29,7 @@ const ReminderListItem = ({
   setModalMode,
 }: reminderProps) => {
   const [isCompleted, setIsCompleted] = useState<boolean>(
-    reminderList.completed
+    reminderList.completed,
   );
   const queryClient = useQueryClient();
 
@@ -54,90 +54,87 @@ const ReminderListItem = ({
       style={{
         flexDirection: "row",
         alignItems: "center",
-        gap: 5,
-        marginBottom: 20,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderBottomColor: "grey",
-        paddingBottom: 10,
+        gap: 10,
+        marginBottom: 18,
+        borderBottomWidth: 1,
+        borderBottomColor: "#f0f0f0",
+        paddingBottom: 12,
+        backgroundColor: isCompleted ? "#f8f8f8" : "#fff",
+        borderRadius: 10,
+        elevation: 1,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
       }}
     >
-      <TouchableOpacity onPress={() => completeTask(isCompleted)}>
+      <TouchableOpacity onPress={() => completeTask(!isCompleted)}>
         {isCompleted ? (
           <MaterialCommunityIcons
-            name="circle-slice-8"
-            size={22}
+            name="check-circle"
+            size={26}
             color="#FF8C00"
             style={{ alignSelf: "flex-start" }}
           />
         ) : (
           <MaterialCommunityIcons
             name="checkbox-blank-circle-outline"
-            size={22}
-            color="grey"
+            size={26}
+            color="#bbb"
             style={{ alignSelf: "flex-start" }}
           />
         )}
       </TouchableOpacity>
-      <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-        <View
+      <View style={{ flex: 1, marginLeft: 8 }}>
+        <Text
           style={{
-            display: "flex",
-            width: "80%",
-            gap: 5,
+            textTransform: "capitalize",
+            fontWeight: "600",
+            fontSize: 16,
+            color: isCompleted ? "#aaa" : "#222",
+            textDecorationLine: isCompleted ? "line-through" : "none",
           }}
         >
+          {reminderList.reminder}
+        </Text>
+        {reminderList.note && (
           <Text
             style={{
-              textTransform: "capitalize",
+              fontSize: 13,
+              color: "#888",
+              marginTop: 2,
             }}
           >
-            {reminderList.reminder}
+            {reminderList.note}
           </Text>
-          {reminderList.note && (
-            <Text
-              style={{
-                fontSize: 12,
-                color: "grey",
-              }}
-            >
-              {reminderList.note}
-            </Text>
-          )}
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 8,
-            justifyContent: "center",
-            alignItems: "center",
+        )}
+      </View>
+      <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
+        <Pressable
+          onPress={() => {
+            setFormData({
+              reminder: reminderList.reminder,
+              note: reminderList.note,
+              id: reminderList.id,
+            });
+            setIsCreateUpdateModal(true);
+            setModalMode("update");
           }}
         >
-          <Pressable
-            onPress={() => {
-              setFormData({
-                reminder: reminderList.reminder,
-                note: reminderList.note,
-                id: reminderList.id,
-              });
-              setIsCreateUpdateModal(true);
-              setModalMode("update");
-            }}
-          >
-            <AntDesign
-              name="infocirlceo"
-              size={17}
-              color="#FF8C00"
-              style={{ alignSelf: "flex-start" }}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              deleteMutation.mutate(reminderList.id);
-            }}
-          >
-            <Feather name="delete" size={20} color="#FF8C00" />
-          </Pressable>
-        </View>
+          <AntDesign
+            name="edit"
+            size={20}
+            color="#FF8C00"
+            style={{ alignSelf: "flex-start" }}
+          />
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            deleteMutation.mutate(reminderList.id);
+          }}
+        >
+          <Feather name="delete" size={20} color="#FF8C00" />
+        </Pressable>
       </View>
     </View>
   );
